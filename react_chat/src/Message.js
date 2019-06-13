@@ -9,7 +9,7 @@ const Message = (props) => (
                 <Feed.Event>
 
                     <Feed.Content>
-                        <Feed.Date content={this.props.mes.time} />
+                        <Feed.Date content={props.mes.time} />
                         <h2>{props.mes.sender}</h2>
                             <p>
                                {props.mes.message}

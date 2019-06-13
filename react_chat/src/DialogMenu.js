@@ -2,17 +2,38 @@ import React, { Component } from 'react'
 import { Input, Label, Menu, Card } from 'semantic-ui-react'
 
 export default class DialogMenu extends Component {
-    state = { activeChat: 'inbox' };
+    constructor(props) {
+        super(props);
+        this.state = {
+            reciever: '',
+        };
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const {reciever} = this.state;
+        const {onSendPrivateMessage} = this.props;
+
+        onSendPrivateMessage(reciever);
+    };
+
 
     handleItemClick = (e, { name }) => this.setState({ activeChat: name });
 
     render() {
+        const {reciever} = this.state;
         const { chats, activeChat, user, setActiveChat, logout } = this.props;
         return (
             <Menu className={'vertical left fixed'} style={{width: '11%'}}>
                 <Menu.Item>
-                    <Input icon='search' placeholder='Search mail...' />
-                </Menu.Item>
+                    <form
+                        onSubmit={this.handleSubmit}>
+                        <Input
+                            icon='search'
+                            placeholder='Search user...'
+                            onChange={(e)=> {this.setState({reciever:e.target.value})}}/>
+                    </form>
+                    </Menu.Item>
                     <div ref={'users'}
                          onClick={(e) => {(e.target === this.refs.user) && setActiveChat(null) }}
                     >
@@ -20,22 +41,23 @@ export default class DialogMenu extends Component {
                             chats.map((chat) => {
                                 if (chat.name) {
                                     const lastMessage = chat.messages[chat.messages.length - 1];
-                                    const user = chat.users.find(({name}) => {
-                                        return name !== this.props.name
-                                    }) || {name: 'Community'};
-                                    const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : ''
+                                    const chatSideName = chat.users.find((name) => {
+                                        return name !== user.name
+                                    }) || 'Community';
+                                    const classNames = (activeChat && activeChat.id === chat.id) ? 'active' : '';
                                     return (
                                         <Menu.Item
+                                            name={chat.name}
                                             key={chat.id}
                                             className={`user ${classNames}`}
                                             onClick={() => {
-                                                setActiveChat(chat)
+                                                setActiveChat(chat);
                                             }}>
                                             <div>
-                                                {user.name[0].toUpperCase()}
+                                                {chatSideName[0].toUpperCase()}
                                             </div>
                                             <div>
-                                                <div>{user.name}</div>
+                                                <div>{chatSideName}</div>
                                                 {lastMessage && <div>{lastMessage.message}</div>}
                                             </div>
 

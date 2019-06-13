@@ -1,9 +1,10 @@
 const uuidv4 = require('uuid/v4');
 
-const createUser = ({name = ''} = {}) => (
+const createUser = ({name = '', socketId = null} = {}) => (
     {
         id: uuidv4(),
-        name
+        name,
+        socketId
     }
 );
 
@@ -18,7 +19,7 @@ const createMessage = ({message = '', sender = ''} = {}) => {
 
 const createChat = ({messages = [], name = 'Community', users = [] } = {}) => {
     return {
-        id: uuidv4,
+        id: uuidv4(),
         name,
         messages,
         users,

@@ -1,9 +1,82 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { Input } from 'semantic-ui-react'
 
-const InputMessage = () => {
-    return(
-    <Input fluid action='Отправить' placeholder='Введите сообщение...' />
-    )};
+export default class InputMessage extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            message: '',
+            isTyping: false
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-export default InputMessage;
+    componentWillUnmount() {
+        this.stopCheckingTyping();
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.sendMessage();
+        this.setState({message: ''})
+
+    }
+
+
+    sendMessage = ()=>{
+        this.props.sendMessage(this.state.message)
+    };
+
+    sendTyping = ()=> {
+        this.lastUpdateTime = Date.now();
+        if(!this.state.isTyping){
+            this.setState({isTyping:true});
+            this.props.sendTyping(true);
+            this.startCheckingTyping();
+        }
+    };
+
+    startCheckingTyping = () => {
+        this.typingInterval = setInterval(() => {
+            if((Date.now() - this.lastUpdateTime) > 300){
+                this.setState({isTyping:false});
+                this.stopCheckingTyping();
+            }
+        }, 300)
+    };
+
+    stopCheckingTyping = () => {
+        if(this.typingInterval){
+            clearInterval(this.typingInterval);
+            this.props.sendTyping(false);
+        }
+    };
+
+    render() {
+        const { message } = this.state;
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <Input
+                        fluid
+                        placeholder='Введите сообщение...'
+                        ref={'messageinput'}
+                        value={message}
+                        autoComplete={'off'}
+                        onKeyUp = {e => {e.keyCode !== 13 && this.sendTyping()}}
+                        onChange = {
+                            ({target}) => {
+                                this.setState({message:target.value})
+                            }
+                        }
+                    />
+                    <button
+                        disabled={message.length < 1}
+                        type={'submit'}>
+                        Отправить
+                    </button>
+                </form>
+            </div>
+            )
+    }
+};
