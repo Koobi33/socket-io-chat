@@ -17,17 +17,23 @@ const createMessage = ({message = '', sender = ''} = {}) => {
     }
 };
 
-const createChat = ({messages = [], name = 'Community', users = [] } = {}) => {
+const createChat = ({messages = [], name = 'Community', isCommunity = false, users = [] } = {}) => {
     return {
-        id: uuidv4,
-        name,
+        id: uuidv4(),
+        name: isCommunity ? 'Community' : createNameFromUsers(users),
         messages,
         users,
-        typingUsers: []
+        typingUsers: [],
+        isCommunity
     }
+};
+
+const createNameFromUsers = (users, excludedUser = '') => {
+    return users.filter(u => u !== excludedUser).join(' & ') || 'Empty Users'
 };
 
 const getTime = (date) => {
     return `${date.getHours()}:${('0'+ date.getMinutes()).slice(-2)}`
 };
 
+module.exports = {createChat, createMessage, createUser, createNameFromUsers};

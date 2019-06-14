@@ -18,7 +18,7 @@ export default class InputMessage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.sendMessage();
-        this.setState({message: ''})
+        this.setState({message: ''});
 
     }
 
@@ -58,6 +58,7 @@ export default class InputMessage extends Component {
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <Input
+                        action={'Отправить'}
                         fluid
                         placeholder='Введите сообщение...'
                         ref={'messageinput'}
@@ -70,11 +71,6 @@ export default class InputMessage extends Component {
                             }
                         }
                     />
-                    <button
-                        disabled={message.length < 1}
-                        type={'submit'}>
-                        Отправить
-                    </button>
                 </form>
             </div>
             )

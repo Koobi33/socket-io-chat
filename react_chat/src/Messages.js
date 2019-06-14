@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Message from './Message'
+import Message from './Message';
+import './Messages.css';
 
 export default class Messages extends Component {
     constructor(props){
@@ -31,19 +32,10 @@ export default class Messages extends Component {
                     messages.map((mes) => {
                             return (
                                 <div
-
                                     key={mes.id}
                                     className={`message-container ${mes.sender === user.name && 'right'}`}>
                                     <Message mes={mes} user={user} />
                                 </div>
-                             //   {/*    key={mes.id}*/}
-                             //   {/*    >*/}
-                            //    {/*    <div>{mes.time}</div>*/}
-                            //    {/*    <div>*/}
-                            //    {/*        <div>{mes.message}</div>*/}
-                           //     {/*        <div>{mes.sender}</div>*/}
-                             //   {/*    </div>*/}
-                             //   {/*</div>*/}
                             )
                         }
                     )

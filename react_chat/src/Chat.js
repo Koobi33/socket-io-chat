@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import DialogMenu from './DialogMenu'
 import DialogWindow from './DialogWindow'
 import io from 'socket.io-client';
 import {USER_CONNECTED, LOGOUT} from './Events';
@@ -42,7 +41,6 @@ class Chat extends Component {
     };
 
     render() {
-        const {title} = this.props;
         const {socket, user} = this.state;
         return (
             <div>

@@ -1,25 +1,19 @@
 import React from 'react'
-import { Card, Feed } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
 import img1 from './elliot.jpg'
 
 const Message = (props) => (
-    <Card style={{minHeight: '80px'}}>
+    <Card className={'message'} >
         <Card.Content>
-            <Feed>
-                <Feed.Event>
-
-                    <Feed.Content>
-                        <Feed.Date content={props.mes.time} />
-                        <h2>{props.mes.sender}</h2>
-                            <p>
-                               {props.mes.message}
-                            </p>
-                    </Feed.Content>
-                    <Feed.Label image={img1} />
-                </Feed.Event>
-            </Feed>
+            <Image src={img1} size={'mini'} floated={'right'}/>
+            <Card.Header>{props.mes.sender}</Card.Header>
+            <Card.Meta>{props.mes.time}</Card.Meta>
         </Card.Content>
+        <Card.Content>
+            <Card.Description>{props.mes.message}</Card.Description>
+        </Card.Content>
+
     </Card>
-)
+);
 
 export default Message;

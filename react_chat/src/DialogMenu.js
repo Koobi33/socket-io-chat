@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Input, Label, Menu, Card } from 'semantic-ui-react'
+import { Input, Menu} from 'semantic-ui-react'
 
 export default class DialogMenu extends Component {
     constructor(props) {
@@ -15,25 +15,24 @@ export default class DialogMenu extends Component {
         const {onSendPrivateMessage} = this.props;
 
         onSendPrivateMessage(reciever);
+        this.setState({reciever: ''});
     };
 
-
-    handleItemClick = (e, { name }) => this.setState({ activeChat: name });
-
     render() {
-        const {reciever} = this.state;
-        const { chats, activeChat, user, setActiveChat, logout } = this.props;
+        const { chats, activeChat, user, setActiveChat, logout} = this.props;
         return (
-            <Menu className={'vertical left fixed'} style={{width: '11%'}}>
-                <Menu.Item>
+            <Menu className={'vertical left fixed'} style={{width: '18%'}}>
+                <Menu.Menu>
                     <form
                         onSubmit={this.handleSubmit}>
                         <Input
                             icon='search'
                             placeholder='Search user...'
-                            onChange={(e)=> {this.setState({reciever:e.target.value})}}/>
+                            onChange={(e)=> {this.setState({reciever:e.target.value})}}
+                            fluid
+                        />
                     </form>
-                    </Menu.Item>
+                </Menu.Menu>
                     <div ref={'users'}
                          onClick={(e) => {(e.target === this.refs.user) && setActiveChat(null) }}
                     >
@@ -54,11 +53,10 @@ export default class DialogMenu extends Component {
                                                 setActiveChat(chat);
                                             }}>
                                             <div>
-                                                {chatSideName[0].toUpperCase()}
-                                            </div>
-                                            <div>
                                                 <div>{chatSideName}</div>
-                                                {lastMessage && <div>{lastMessage.message}</div>}
+                                                {
+                                                    lastMessage ? lastMessage.message.length < 30 ? <div>{lastMessage.message}</div> : <div>{lastMessage.message.substr(0,20) + '...'}</div> : null
+                                                }
                                             </div>
 
                                         </Menu.Item>
@@ -72,16 +70,6 @@ export default class DialogMenu extends Component {
                         <span>{user.name}</span>
                         <div onClick={() => {logout()}}>logout</div>
                     </div>
-                {/*<Menu.Item name='inbox' active={activeChat === 'inbox'} onClick={this.handleItemClick}>*/}
-                {/*    <Card>*/}
-                {/*        <Card.Content>*/}
-                {/*            <Card.Header>Matthew Harris</Card.Header>*/}
-                {/*            <Card.Meta>Co-Worker</Card.Meta>*/}
-                {/*            <Card.Description>Matthew is a pianist living in Nashville.</Card.Description>*/}
-                {/*        </Card.Content>*/}
-                {/*    </Card>*/}
-                {/*</Menu.Item>*/}
-
             </Menu>
         )
     }

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Message from "./Message";
 import InputMessage from "./InputMessage";
 import { Segment } from 'semantic-ui-react'
 import DialogMenu from "./DialogMenu";
@@ -13,7 +12,8 @@ class DialogWindow extends  Component {
         this.state = {
             chats: [],
             activeChat: null,
-            numberOfUsers: 0
+            numberOfUsers: 0,
+            users: []
         };
     }
     componentDidMount() {
@@ -31,7 +31,8 @@ class DialogWindow extends  Component {
 
     sendOpenPrivateMessage = (reciever) => {
         const {socket, user} = this.props;
-        socket.emit(PRIVATE_MESSAGE, {reciever, sender: user.name})
+        const { activeChat } = this.state;
+        socket.emit(PRIVATE_MESSAGE, {reciever, sender: user.name, activeChat})
     };
 
     setActiveChat = (activeChat) => {
@@ -99,22 +100,20 @@ class DialogWindow extends  Component {
 
     render() {
         const {user,logout} = this.props;
-        const {chats, activeChat, numberOfUsers} = this.state;
+        const {chats, activeChat, numberOfUsers, users } = this.state;
         return (
             <div>
                 <DialogMenu
                     logout={logout}
                     chats={chats}
                     user={user}
+                    users={users}
                     activeChat={activeChat}
                     setActiveChat={this.setActiveChat}
                     onSendPrivateMessage={this.sendOpenPrivateMessage}
                 />
-                <div style={{position: 'absolute', left: '11%', height: '100%', width: '100%'}}>
+                <div style={{position: 'absolute', left: '17%', height: '100%', width: '83%', paddingLeft: '1%'}}>
                     <div style={{paddingTop: '8vh'}}>
-                        <div color={'teal'}>
-
-
                                 {
                                     activeChat !== null ? (
                                         <div>
@@ -128,35 +127,38 @@ class DialogWindow extends  Component {
                                                 flexGrow: '1',
                                                 overflowY: 'auto',
                                                 minHeight: '0px',
-                                                paddingLeft: '10px'
+                                                width: '100%'
                                             }}>
                                             <Segment style={{
+                                                zIndex: 1,
                                                 marginTop: '0px',
                                                 width: '100%',
                                                 top: '0',
                                                 position: 'fixed',
-                                                paddingBottom: '1%'
+                                                paddingBottom: '1%',
+                                                // paddingLeft: '1%'
                                             }}>
                                                 {activeChat.name}
                                                 <span>{numberOfUsers ? numberOfUsers : null}</span>
                                             </Segment>
                                             <Messages
+                                                style={{zIndex: 0}}
                                                 messages={activeChat.messages}
                                                 user={user}
                                                 typingUsers={activeChat.typingUsers}
                                             />
                                             </div>
 
-                                            <div style={{width: '89%', marginTop: '15px', position: 'fixed', bottom: '0'}}>
+                                            <div style={{width: '82%', marginTop: '15px', position: 'fixed', bottom: '0'}}>
                                                 <InputMessage
                                                     sendMessage = {
                                                         (message) => {
-                                                    this.sendMessage(activeChat.id, message)
-                                                }}
-                                                sendTyping = {
-                                                    (isTyping)=> {
-                                                        this.sendTyping(activeChat.id, isTyping)
-                                                    }}
+                                                            this.sendMessage(activeChat.id, message)
+                                                                    }}
+                                                    sendTyping = {
+                                                        (isTyping)=> {
+                                                            this.sendTyping(activeChat.id, isTyping)
+                                                                     }}
                                                 />
                                             </div>
                                         </div>
@@ -165,7 +167,6 @@ class DialogWindow extends  Component {
                                             <h2>Choose chat</h2>
                                         </div>
                                 }
-                        </div>
                     </div>
                 </div>
             </div>

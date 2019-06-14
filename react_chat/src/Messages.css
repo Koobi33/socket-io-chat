@@ -1,0 +1,15 @@
+.right {
+    display: flex;
+    /*flex-flow: row;*/
+    justify-content: flex-end;
+}
+
+.message-container {
+    padding: 5px 20px 15px 20px;
+}
+
+.message {
+    min-height: 80px;
+    padding-top: 10px;
+    word-wrap: break-word;
+}
